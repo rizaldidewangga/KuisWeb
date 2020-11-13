@@ -1,7 +1,7 @@
 const ApiKey = "";
 const baseUrl = "http://ergast.com/api/f1/2020/";
 const teamEndPoin = `${baseUrl}constructors.json`;
-const matchEndPoin = `${baseUrl}.json`;
+const matchEndPoin = `${baseUrl}drivers.json`;
 
 const contents = document.querySelector("#content-list");
 const title = document.querySelector(".card-title");
@@ -9,7 +9,7 @@ const fetchres = fetch(teamEndPoin);
 const fetchresmatch = fetch(matchEndPoin);
 
 function getListConstructors() {
-    title.innerHTML = "Daftar Tim F1"
+    title.innerHTML = "Daftar Pemabalap F1 2020"
     fetch(teamEndPoin, fetchres)
         .then(response => response.json())
         .then(resJson => {
@@ -33,27 +33,28 @@ function getListConstructors() {
 }
 
 function getListMatches() {
-    title.innerHTML = "Standing F1";
+    title.innerHTML = "Biodata Pembalap F1 2020";
     fetch(matchEndPoin, fetchresmatch)
         .then(response => response.json())
         .then(resJson => {
             console.log(matchEndPoin);
-            let Stand = "";
-            console.log(resJson.MRData.StandingsTable.StandingsLists);
-            resJson.MRData.StandingsTable.StandingsLists.forEach(StandingsLists => 
-                Stand += `
+            let DriverList = "";
+            console.log(resJson.MRData.DriverTable.Drivers);
+            resJson.MRData.DriverTable.Drivers.forEach(Drivers => 
+                DriverList += `
                 <li class="collection-item avatar">
-                    <span class="title">${StandingsLists.DriverStandings.position}</span>
-                    <p>Season: ${StandingsLists.season}<br>
-                       Ronde: ${StandingsLists.round} <br>
-                       Point: ${StandingsLists.DriverStandings.points}<br>
-                       Menang: ${StandingsLists.DriverStandings.wins}<br>
+                    <span class="title">${Drivers.driverId}</span>
+                    <p> Kode: ${Drivers.code} <br>
+                        Nama Depan: ${Drivers.givenName}<br>
+                        Nama Belakang: ${Drivers.familyName}<br>
+                        Lahir: ${Drivers.dateOfBirth}<br>
+                        Kebangsaan: ${Drivers.nationality}<br>
                     </p>
-                    <a href="#" data-id="${StandingsLists.id}" class="secondary-content"><i class="material-icons" data-id="${StandingsLists.id}">info</i></a>
+                    <a href="#" data-id="${Drivers.id}" class="secondary-content"><i class="material-icons" data-id="${Drivers.id}">info</i></a>
                 </li>
                 `
             );
-            contents.innerHTML = '<ul class="collection">' + Stand + '</ul>';
+            contents.innerHTML = '<ul class="collection">' + DriverList + '</ul>';
         }).catch(err => {
             console.error(err);
         })
